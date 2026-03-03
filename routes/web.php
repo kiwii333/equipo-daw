@@ -9,6 +9,27 @@ use App\Http\Controllers\LegalController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
+use Laravel\Socialite\Facade\Socialite;
+
+Route::get('/google-auth/callback',function(){
+    $user_google = Socialite::driver('google')->stateless()->user();
+    $user = User::where('email',$user_google->email)->first();
+
+    if($user){
+        $user->google_id = $user_google->id;
+        $user->save();
+    }else{
+        $user = new User();
+        $user -> username = $user_google->name;
+        $user -> name = $user_google->name;
+        $user -> email = $user_google->email;
+        $user -> google_id = $user_google->id;
+        $user -> save();
+    }
+
+    Auth::login($user);
+    return redirect()->route('users.account');
+});
 
 
 Route::get('/', IndexController::class);
