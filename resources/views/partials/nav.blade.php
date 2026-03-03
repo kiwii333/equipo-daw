@@ -11,4 +11,5 @@
         <a href="{{route('events.create')}}">Añadir Eventos</a>
         <a href="{{route('messages.index')}}">Mensajes</a>
     @endif
+    <a href="{{route('googlepage')}}">Loguéate con SSO Google</a>
 </nav>
